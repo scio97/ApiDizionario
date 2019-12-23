@@ -1,0 +1,16 @@
+<?php
+include("connessione.php");
+include("funzioni.php");
+if($_GET["mod"]=="cerca"){
+    cerca();
+}
+if($_GET["mod"]=="aggiungi"){
+    aggiungi();
+}
+if($_GET["mod"]=="modifica"){
+    modifica();
+}
+if($_GET["mod"]=="elimina"){
+    elimina();
+}
+?>
