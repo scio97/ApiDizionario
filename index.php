@@ -13,4 +13,10 @@ if($_GET["mod"]=="modifica"){
 if($_GET["mod"]=="elimina"){
     elimina();
 }
+if($_GET["mod"]=="login"){
+    login();
+}
+if($_GET["mod"]=="registra"){
+    registra();
+}
 ?>
