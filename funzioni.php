@@ -77,7 +77,7 @@ function login(){
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if($row["password"]==$password){
-            $risposta["risultato"]=true;
+            $risposta["risultato"]="ok";
             $risposta["tipo"]=$row["tipo"];
         }else{
             $risposta["risultato"]="passworderr";
