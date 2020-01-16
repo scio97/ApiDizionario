@@ -4,7 +4,7 @@ function cerca(){
     global $conn;
     header("Content-Type:application/json");
     $termine=$_GET["termine"];
-    $result = $conn->query("SELECT termine, significato FROM termini WHERE termine='$termine'");
+    $result = $conn->query("SELECT termine, significato, utente FROM termini WHERE termine='$termine'");
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $risposta["significato"]=$row["significato"];
