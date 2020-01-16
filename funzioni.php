@@ -8,6 +8,7 @@ function cerca(){
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $risposta["significato"]=$row["significato"];
+            $risposta["utente"]=$row["utente"];
         }
     }else{
         $risposta["significato"]=null;
@@ -20,8 +21,9 @@ function aggiungi(){
     global $conn;
     $termine = $_GET["termine"];
     $significato = $_GET["significato"];
+    $utente = $_GET["utente"];
     if(!check_termine($termine)){
-        $conn->query("INSERT INTO termini (termine, significato) VALUES ('$termine', '$significato')");
+        $conn->query("INSERT INTO termini (termine, significato,utente) VALUES ('$termine', '$significato','$utente')");
         $risposta["risultato"]=true;
     }else{
         $risposta["risultato"]=false;
