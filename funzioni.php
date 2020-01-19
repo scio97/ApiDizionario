@@ -21,8 +21,8 @@ function aggiungi(){
     global $conn;
     $termine = $_GET["termine"];
     $significato = $_GET["significato"];
-    $utente = $_GET["utente"];
-    if(!check_termine($termine)){
+    $utente = strtoupper($_GET["utente"]);
+    if(check_termine($termine,"ADMIN")==2){
         $conn->query("INSERT INTO termini (termine, significato,utente) VALUES ('$termine', '$significato','$utente')");
         $risposta["risultato"]=true;
     }else{
@@ -36,11 +36,17 @@ function modifica(){
     global $conn;
     $termine = $_GET["termine"];
     $significato = $_GET["significato"];
-    if(check_termine($termine)){
+    $utente= strtoupper($_GET["utente"]);
+    $check=check_termine($termine,$utente);
+    if($check==0){
         $conn->query("UPDATE termini SET significato='$significato' WHERE termine='$termine'");
-        $risposta["risultato"]=true;
+        $risposta["risultato"]=0;
     }else{
-        $risposta["risultato"]=false;
+        if($check==1){
+            $risposta["risultato"]=1;
+        }else{
+            $risposta["risultato"]=2;
+        }
     }
     echo $json_response = json_encode($risposta); 
 }
@@ -49,25 +55,19 @@ function elimina(){
     header("Content-Type:application/json");
     global $conn;
     $termine = $_GET["termine"];
-    if(check_termine($termine)){
+    $utente= strtoupper($_GET["utente"]);
+    $check=check_termine($termine,$utente);
+    if($check==0){
         $conn->query("DELETE FROM termini WHERE termine='$termine'");
-        $risposta["risultato"]=true;
+        $risposta["risultato"]=0;
     }else{
-        $risposta["risultato"]=false;
+        if($check==1){
+            $risposta["risultato"]=1;
+        }else{
+            $risposta["risultato"]=2;
+        }
     }
     echo $json_response = json_encode($risposta);
-}
-//////////CHECK_TERMINE//////////
-function check_termine($termine){
-    global $conn;
-    $result = $conn->query("SELECT termine FROM termini WHERE termine='$termine'");
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            return true;
-        }
-    }else{
-        return false;
-    }
 }
 //////////LOGIN//////////
 function login(){
@@ -113,6 +113,21 @@ function check_utente($user){
         }
     }else{
         return false;
+    }
+}
+//////////CHECK_TERMINE//////////
+function check_termine($termine,$utente){
+    global $conn;
+    $result = $conn->query("SELECT termine,utente FROM termini WHERE termine='$termine'");
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if($row["utente"]==$utente||$utente=="ADMIN"){
+            return 0;
+        }else{
+            return 1;
+        }
+    }else{
+        return 2;
     }
 }
 ?>
